@@ -1,20 +1,22 @@
 ﻿using AutoMapper;
 using PermissionManagement.Model;
-using PermissionManagement.Repositories;
 using PermissionManagement.Repositories.UnitOfWork;
+using PermissionManagement.Repository;
+using PermissionManagement.Repository.PermissionRepository;
 using PermissionManagement.ViewModels;
 using Serilog;
+using System.Security;
 
 namespace PermissionManagement.Services
 {
     public class PermissionService : BaseService, IPermissionService
     {
-        private IRepository<permissionModel> _permissionRepository;
+        private IPermissionRepository _permissionRepository;
         private IUnitOfWork _unitOfWork;
         private IMapper _mapper;
         private Serilog.ILogger _logger;
         public PermissionService(
-            IRepository<permissionModel> permissionRepository,
+            IPermissionRepository permissionRepository,
             IUnitOfWork unitOfWork,
             IMapper mapper,
             Serilog.ILogger logger)
@@ -35,9 +37,7 @@ namespace PermissionManagement.Services
                 await _permissionRepository.AddAsync(permissionMap);
                 await SaveAsync(_unitOfWork);
                 permission = _mapper.Map<PermissionViewModel>(permissionMap);
-#if DEBUG
                 _logger.Information<PermissionViewModel>("permission added", permission);
-#endif
                 return permission;
             }
             catch (Exception ex)
@@ -54,27 +54,36 @@ namespace PermissionManagement.Services
             if (itemToDelete != null)
             {
                 _permissionRepository.Delete(itemToDelete);
+                _logger.Information<permissionModel>("permission deletted", itemToDelete);
                 return true;
             }
             else
             {
+                _logger.Error<permissionModel>("permission to delete not found", itemToDelete);
                 return false;
             }
         }
 
-        public async Task<permissionModel> getPermissionByID(Guid idPermission)
+        public async Task<permissionModel> getPermissionById(Guid idPermission)
         {
+            _logger.Information<Guid>("Get Permission By ID", idPermission);
             return await _permissionRepository.getByIDAsync(idPermission);
         }
 
         public async Task<List<permissionModel>> getPermissionList()
         {
+            _logger.Information("Get full Permission List");
             return await _permissionRepository.GetAll();
+        }
+
+        public async Task<List<permissionModel>> getPermissionByEmployeeId(Guid employeeId)
+        {
+            _logger.Information<Guid>("Get Permission List By EmployeeId", employeeId);
+            return await _permissionRepository.GetAllPermissionByEmployeeId(employeeId);
         }
 
         public async Task<bool> updatePermission(Guid id, permissionModel permission)
         {
-            //add DTO parse
             try
             {
                 var itemToUpdate = await _permissionRepository.getByIDAsync(id);
@@ -86,12 +95,14 @@ namespace PermissionManagement.Services
                     await BegginTransationAsync(_unitOfWork);
                     _permissionRepository.Update(itemToUpdate);
                     await SaveAsync(_unitOfWork);
+                    _logger.Information<permissionModel>("permission updated", permission);
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 await RollBackAsync(_unitOfWork);
+                _logger.Error<permissionModel>(ex.Message, permission);
             }
             return false;
         }

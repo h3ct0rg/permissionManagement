@@ -1,13 +1,15 @@
+using Confluent.Kafka;
 using Microsoft.EntityFrameworkCore;
 using PermissionManagement.AutoMapper;
 using PermissionManagement.Model;
-using PermissionManagement.Repositories;
 using PermissionManagement.Repositories.UnitOfWork;
+using PermissionManagement.Repository.BaseRepository;
 using PermissionManagement.Repository.ElasticSearch;
+using PermissionManagement.Repository.PermissionRepository;
 using PermissionManagement.Service.ElasticSearch;
+using PermissionManagement.Service.Kafka;
 using PermissionManagement.Services;
 using Serilog;
-using userPermissionManagement.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,7 @@ builder.Services.AddSingleton<Serilog.ILogger>(dd => Log.Logger);
 
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(RepositoryBase<>));
+builder.Services.AddScoped(typeof(IPermissionRepository), typeof(PermissionRepository));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
@@ -43,6 +46,18 @@ builder.Services.AddSingleton<IElasticSearchProvider>(provider =>
     var elasticSearchUri = new Uri(builder.Configuration.GetConnectionString("elasticSearchConnection"));
     return new ElasticSearchProvider(elasticSearchUri);
 });
+
+builder.Services.AddSingleton<IProducer<string, string>>(provider =>
+{
+    var kafkaConfig = new ProducerConfig
+    {
+        BootstrapServers = builder.Configuration.GetConnectionString("kafkaConnection"), // Cambia esto según tu configuración de Kafka
+        ClientId = "test-producer"
+    };
+    return new ProducerBuilder<string, string>(kafkaConfig).Build();
+});
+
+builder.Services.AddScoped<IKafkaService, KafkaService>();
 
 var app = builder.Build();
 

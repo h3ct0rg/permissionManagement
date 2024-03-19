@@ -1,14 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using PermissionManagement.Model;
-using PermissionManagement.Repositories;
 
-namespace userPermissionManagement.Repositories
+namespace PermissionManagement.Repository.BaseRepository
 {
     public class RepositoryBase<T> : IRepository<T> where T : class
     {
-        private readonly DbContext _context;
-        private readonly DbSet<T> _dbSet;
+        protected readonly DbContext _context;
+        protected readonly DbSet<T> _dbSet;
 
         public RepositoryBase(permissionModelContext context)
         {
@@ -35,7 +34,7 @@ namespace userPermissionManagement.Repositories
         {
             return await _dbSet.FindAsync(id);
         }
-                
+
         public void Update(T entity)
         {
             _dbSet.Update(entity);

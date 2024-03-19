@@ -35,6 +35,10 @@ namespace PermissionManagement.Controllers
             _deletePermissionCommand = deletePermissionCommand;            
         }
 
+        /// <summary>
+        /// Retrieves a list of permissions.
+        /// </summary>
+        /// <returns>A list of permissions.</returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -43,6 +47,11 @@ namespace PermissionManagement.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Retrieves permissions associated with a specific employee.
+        /// </summary>
+        /// <param name="employeeId">The ID of the employee.</param>
+        /// <returns>Permissions associated with the employee.</returns>
         [HttpGet("getPermissionByEmployee")]
         public async Task<IActionResult> GetPermissionByEmployee([FromQuery] Guid employeeId)
         {
@@ -51,6 +60,11 @@ namespace PermissionManagement.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Retrieves a permission by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the permission.</param>
+        /// <returns>The permission.</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
@@ -59,6 +73,11 @@ namespace PermissionManagement.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Adds a new permission.
+        /// </summary>
+        /// <param name="permission">The permission to add.</param>
+        /// <returns>The added permission.</returns>
         [HttpPost]
         public async Task<IActionResult> Post(PermissionViewModel permission)
         {
@@ -67,6 +86,12 @@ namespace PermissionManagement.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Updates an existing permission.
+        /// </summary>
+        /// <param name="id">The ID of the permission to update.</param>
+        /// <param name="permission">The updated permission data.</param>
+        /// <returns>The updated permission.</returns>
         [HttpPut]
         public async Task<IActionResult> Put(Guid id, permissionModel permission)
         {
@@ -75,6 +100,11 @@ namespace PermissionManagement.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Deletes a permission by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the permission to delete.</param>
+        /// <returns>The result of the delete operation.</returns>
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {

@@ -2,9 +2,9 @@
 using Serilog;
 using PermissionManagement.ViewModels;
 using PermissionManagement.Services;
-using PermissionManagement.Repositories;
 using PermissionManagement.Model;
 using PermissionManagement.Repositories.UnitOfWork;
+using PermissionManagement.Repository.BaseRepository;
 
 namespace PermissionManagement.Services
 {

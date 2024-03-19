@@ -1,4 +1,4 @@
-﻿namespace PermissionManagement.Repositories
+﻿namespace PermissionManagement.Repository.BaseRepository
 {
     public interface IRepository<T>
     {

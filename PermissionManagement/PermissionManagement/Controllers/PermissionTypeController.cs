@@ -17,6 +17,10 @@ namespace PermissionTypeeManagement.Controllers
             _PermissionTypeService = PermissionTypeService;
         }
 
+        /// <summary>
+        /// Retrieves the list of permission types.
+        /// </summary>
+        /// <returns>A list of permission types.</returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -24,6 +28,11 @@ namespace PermissionTypeeManagement.Controllers
             return Ok(PermissionTypeeList);
         }
 
+        /// <summary>
+        /// Retrieves a permission type by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the permission type.</param>
+        /// <returns>The permission type information.</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
@@ -31,6 +40,11 @@ namespace PermissionTypeeManagement.Controllers
             return Ok(PermissionTypeeList);
         }
 
+        /// <summary>
+        /// Adds a new permission type.
+        /// </summary>
+        /// <param name="permissionType">The permission type to add.</param>
+        /// <returns>The added permission type.</returns>
         [HttpPost]
         public async Task<IActionResult> Post(PermissionTypeViewModel PermissionTypee)
         {
@@ -38,6 +52,12 @@ namespace PermissionTypeeManagement.Controllers
             return Ok(PermissionTypeeResponse);
         }
 
+        /// <summary>
+        /// Updates an existing permission type.
+        /// </summary>
+        /// <param name="id">The ID of the permission type to update.</param>
+        /// <param name="permissionType">The updated permission type data.</param>
+        /// <returns>The updated permission type.</returns>
         [HttpPut]
         public async Task<IActionResult> Put(Guid id, PermissionTypeModel PermissionTypee)
         {
@@ -45,6 +65,11 @@ namespace PermissionTypeeManagement.Controllers
             return Ok(PermissionTypeeList);
         }
 
+        /// <summary>
+        /// Deletes a permission type by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the permission type to delete.</param>
+        /// <returns>The result of the delete operation.</returns>
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {

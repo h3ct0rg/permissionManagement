@@ -3,6 +3,8 @@ using PermissionManagement.AutoMapper;
 using PermissionManagement.Model;
 using PermissionManagement.Repositories;
 using PermissionManagement.Repositories.UnitOfWork;
+using PermissionManagement.Repository.ElasticSearch;
+using PermissionManagement.Service.ElasticSearch;
 using PermissionManagement.Services;
 using Serilog;
 using userPermissionManagement.Repositories;
@@ -33,8 +35,14 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IPermissionTypeService, PermissionTypeService>();
+builder.Services.AddScoped<IElasticSearchService, ElasticSearchService>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddSingleton<IElasticSearchProvider>(provider =>
+{
+    var elasticSearchUri = new Uri(builder.Configuration.GetConnectionString("elasticSearchConnection"));
+    return new ElasticSearchProvider(elasticSearchUri);
+});
 
 var app = builder.Build();
 

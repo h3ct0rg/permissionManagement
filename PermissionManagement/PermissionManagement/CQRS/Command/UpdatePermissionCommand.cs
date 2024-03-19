@@ -11,6 +11,11 @@ namespace PermissionManagement.CQRS.Command
     {
         public Guid Id { get; set; }
         public permissionModel Permission { get; set; }
+        public UpdatePermissionCommand(Guid id, permissionModel permission)
+        {
+            Id = id;
+            Permission = permission;
+        }
     }
 
     public class UpdatePermissionCommandHandler : ICommandHandler<UpdatePermissionCommand, bool>

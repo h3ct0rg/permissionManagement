@@ -88,6 +88,8 @@ namespace PermissionManagement.Services
             {
                 var itemToUpdate = await _permissionRepository.getByIDAsync(id);
 
+                itemToUpdate.idEmployee = permission.idEmployee != Guid.Empty ? permission.idEmployee : itemToUpdate.idEmployee;
+                itemToUpdate.idPermissionType = permission.idPermissionType != Guid.Empty ? permission.idPermissionType : itemToUpdate.idPermissionType;
                 itemToUpdate.updatedDate = DateTime.Now;
 
                 if (itemToUpdate != null)

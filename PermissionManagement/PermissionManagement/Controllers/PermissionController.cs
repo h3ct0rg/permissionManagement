@@ -25,15 +25,25 @@ namespace PermissionManagement.Controllers
         private readonly IQueryHandler<GetPermissionListQuery, List<permissionModel>> _getPermissionListQueryHandler;
         private readonly IQueryHandler<GetPermissionByEmployeeQuery, List<permissionModel>> _getPermissionByEmployeeQueryHandler;
         private readonly IQueryHandler<GetPermissionByIdQuery, permissionModel> _getPermissionByIdQueryHandler;
+        private readonly ICommandHandler<AddPermissionCommand, PermissionViewModel> _addPermissionCommand;
+        private readonly ICommandHandler<UpdatePermissionCommand, bool> _updatePermissionCommand;
+        private readonly ICommandHandler<DeletePermissionCommand, bool> _deletePermissionCommand;
 
         public PermissionController(IPermissionService permissionService, IElasticSearchService elasticSearchService, IKafkaService kafkaService,
             IQueryHandler<GetPermissionListQuery, List<permissionModel>> getPermissionListQueryHandler,
             IQueryHandler<GetPermissionByEmployeeQuery, List<permissionModel>> getPermissionByEmployeeQueryHandler,
-            IQueryHandler<GetPermissionByIdQuery, permissionModel> getPermissionByIdQueryHandler)
+            IQueryHandler<GetPermissionByIdQuery, permissionModel> getPermissionByIdQueryHandler,
+            ICommandHandler<AddPermissionCommand, PermissionViewModel> addPermissionCommand,
+            ICommandHandler<UpdatePermissionCommand, bool> updatePermissionCommand,
+            ICommandHandler<DeletePermissionCommand, bool> deletePermissionCommand
+            )
         {
             _getPermissionListQueryHandler = getPermissionListQueryHandler;
             _getPermissionByEmployeeQueryHandler = getPermissionByEmployeeQueryHandler;
             _getPermissionByIdQueryHandler = getPermissionByIdQueryHandler;
+            _addPermissionCommand = addPermissionCommand;
+            _updatePermissionCommand = updatePermissionCommand;
+            _deletePermissionCommand = deletePermissionCommand;
 
             _permissionService = permissionService;
             _elasticSearchService = elasticSearchService;
@@ -68,29 +78,25 @@ namespace PermissionManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(PermissionViewModel permission)
         {
-            //var query = new AddPermissionCommand(permission);
-            //var response = await _addPermissionCommand.HandleAsync(query);
-            var permissionResponse = await _permissionService.addPermissionAsync(permission);
-            await _elasticSearchService.IndexDocumentAsync(permissionResponse, stringConstants.permissionIndex, _cancellationToken);
-            _kafkaService.ProduceMessage(new KafkaMessageModel(EnumConstants.enumOperation.request), "test_topic");
-            return Ok(permissionResponse);
+            var query = new AddPermissionCommand(permission);
+            var response = await _addPermissionCommand.HandleAsync(query);
+            return Ok(response);
         }
 
         [HttpPut]
         public async Task<IActionResult> Put(Guid id, permissionModel permission)
         {
-            var permissionResponse = await _permissionService.updatePermission(id, permission);
-            await _elasticSearchService.IndexDocumentAsync(permission, stringConstants.permissionIndex, _cancellationToken);
-            _kafkaService.ProduceMessage(new KafkaMessageModel(EnumConstants.enumOperation.modify), "test_topic");
-            return Ok(permissionResponse);
+            var query = new UpdatePermissionCommand(id, permission);
+            var response = await _updatePermissionCommand.HandleAsync(query);
+            return Ok(response);
         }
 
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var permissionResponse = await _permissionService.deletePermission(id);
-            await _elasticSearchService.IndexDocumentAsync(new permissionModel { Id = id }, stringConstants.permissionIndex, _cancellationToken);
-            return Ok(permissionResponse);
+            var query = new DeletePermissionCommand(id);
+            var response = await _deletePermissionCommand.HandleAsync(query);
+            return Ok(response);
         }
     }
 }

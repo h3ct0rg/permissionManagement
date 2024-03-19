@@ -69,9 +69,9 @@ builder.Services.AddScoped<IQueryHandler<GetPermissionListQuery, List<permission
 builder.Services.AddScoped<IQueryHandler<GetPermissionByEmployeeQuery, List<permissionModel>>, GetPermissionByEmployeeQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetPermissionByIdQuery, permissionModel>, GetPermissionByIdQueryHandler>();
 
-//builder.Services.AddScoped<ICommandHandler<AddPermissionCommand, PermissionViewModel>, AddPermissionCommandHandler>();
-//builder.Services.AddScoped<ICommandHandler<UpdatePermissionCommand, bool>, UpdatePermissionCommandHandler>();
-//builder.Services.AddScoped<ICommandHandler<DeletePermissionCommand, bool>, DeletePermissionCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<AddPermissionCommand, PermissionViewModel>, AddPermissionCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<UpdatePermissionCommand, bool>, UpdatePermissionCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<DeletePermissionCommand, bool>, DeletePermissionCommandHandler>();
 #endregion
 
 builder.Services.AddScoped<IKafkaService, KafkaService>();

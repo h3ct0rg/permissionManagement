@@ -8,6 +8,10 @@ namespace PermissionManagement.CQRS.Command
     public class DeletePermissionCommand
     {
         public Guid Id { get; set; }
+        public DeletePermissionCommand(Guid id)
+        {
+            Id = id;
+        }
     }
 
     public class DeletePermissionCommandHandler : ICommandHandler<DeletePermissionCommand, bool>

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PermissionManagement", "PermissionManagement\PermissionManagement.csproj", "{B670D811-3381-4D78-865A-2E2572DCBBD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PermissionManagement", "PermissionManagement\PermissionManagement.csproj", "{B670D811-3381-4D78-865A-2E2572DCBBD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PermissionManagementTest", "PermissionManagementTest\PermissionManagementTest.csproj", "{7D489E44-19C2-42C1-8DA6-93738ECCB67B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B670D811-3381-4D78-865A-2E2572DCBBD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B670D811-3381-4D78-865A-2E2572DCBBD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B670D811-3381-4D78-865A-2E2572DCBBD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D489E44-19C2-42C1-8DA6-93738ECCB67B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D489E44-19C2-42C1-8DA6-93738ECCB67B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D489E44-19C2-42C1-8DA6-93738ECCB67B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D489E44-19C2-42C1-8DA6-93738ECCB67B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

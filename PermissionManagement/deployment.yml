@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: permission-management
+  labels:
+    app: permission-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: permission-management
+  template:
+    metadata:
+      labels:
+        app: permission-management
+    spec:
+      containers:
+      - name: permission-management
+        image: PermissionManagement:last
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: permission-management-config

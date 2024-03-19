@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: permission-management-config
+data:
+  appsettings.json: |
+    {
+      "ConnectionStrings": {
+        "interviewConnection": "Data Source=localhost; Initial Catalog=permissionManagement; Persist Security Info=False; User ID=sa; pwd=password;",
+        "elasticSearchConnection": "http://localhost:9200",
+        "kafkaConnection": "http://localhost:9092"
+      }
+    }

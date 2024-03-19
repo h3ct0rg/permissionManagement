@@ -1,15 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PermissionManagement.CQRS.Query;
 using PermissionManagement.CQRS;
-using PermissionManagement.Helpers;
 using PermissionManagement.Model;
-using PermissionManagement.Model.Kafka;
-using PermissionManagement.Service.ElasticSearch;
-using PermissionManagement.Service.Kafka;
-using PermissionManagement.Services;
 using PermissionManagement.ViewModels;
-using System.Threading;
 using PermissionManagement.CQRS.Command;
 
 namespace PermissionManagement.Controllers
@@ -18,10 +11,6 @@ namespace PermissionManagement.Controllers
     [ApiController]
     public class PermissionController : ControllerBase
     {
-        private IPermissionService _permissionService;
-        private IElasticSearchService _elasticSearchService;
-        private IKafkaService _kafkaService;
-        private CancellationToken _cancellationToken;
         private readonly IQueryHandler<GetPermissionListQuery, List<permissionModel>> _getPermissionListQueryHandler;
         private readonly IQueryHandler<GetPermissionByEmployeeQuery, List<permissionModel>> _getPermissionByEmployeeQueryHandler;
         private readonly IQueryHandler<GetPermissionByIdQuery, permissionModel> _getPermissionByIdQueryHandler;
@@ -29,7 +18,7 @@ namespace PermissionManagement.Controllers
         private readonly ICommandHandler<UpdatePermissionCommand, bool> _updatePermissionCommand;
         private readonly ICommandHandler<DeletePermissionCommand, bool> _deletePermissionCommand;
 
-        public PermissionController(IPermissionService permissionService, IElasticSearchService elasticSearchService, IKafkaService kafkaService,
+        public PermissionController(
             IQueryHandler<GetPermissionListQuery, List<permissionModel>> getPermissionListQueryHandler,
             IQueryHandler<GetPermissionByEmployeeQuery, List<permissionModel>> getPermissionByEmployeeQueryHandler,
             IQueryHandler<GetPermissionByIdQuery, permissionModel> getPermissionByIdQueryHandler,
@@ -43,12 +32,7 @@ namespace PermissionManagement.Controllers
             _getPermissionByIdQueryHandler = getPermissionByIdQueryHandler;
             _addPermissionCommand = addPermissionCommand;
             _updatePermissionCommand = updatePermissionCommand;
-            _deletePermissionCommand = deletePermissionCommand;
-
-            _permissionService = permissionService;
-            _elasticSearchService = elasticSearchService;
-            _kafkaService = kafkaService;
-            _cancellationToken = new CancellationToken();
+            _deletePermissionCommand = deletePermissionCommand;            
         }
 
         [HttpGet]
